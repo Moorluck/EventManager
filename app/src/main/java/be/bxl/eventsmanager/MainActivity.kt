@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import be.bxl.eventsmanager.fragments.EventsManagerFragment
 import be.bxl.eventsmanager.fragments.MainFragment
 import be.bxl.eventsmanager.fragments.NewEventFragment
+import be.bxl.eventsmanager.models.Event
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -17,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     // data
 
-    private lateinit var repository : EventRepository
+    lateinit var repository : EventRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +36,6 @@ class MainActivity : AppCompatActivity() {
 
         // Récupère les fragments
         val mainFragment : MainFragment = MainFragment.newInstance()
-        val newEventFragment = NewEventFragment.newInstance()
         val eventsManagerFragment : EventsManagerFragment = EventsManagerFragment.newInstance()
 
         // Set Delete btn
@@ -50,10 +50,20 @@ class MainActivity : AppCompatActivity() {
         // Set the button add
         eventsManagerFragment.setOnAddEventClickListener {
             val transaction = fm.beginTransaction().apply {
+                val newEventFragment = NewEventFragment.newInstance()
                 replace(fragmentContainer.id, newEventFragment)
                 addToBackStack(null)
             }
             transaction.commit()
+        }
+
+        // Set edit button
+        eventsManagerFragment.setOnEditBtnClickListener {
+            editEvent(repository.getEventById(it))
+        }
+
+        mainFragment.setOnEditBtnClickListener {
+            editEvent(repository.getEventById(it))
         }
 
         // Affiche le fragment initial
@@ -104,6 +114,22 @@ class MainActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
+    private fun editEvent(event : Event?) {
+
+        val newEventFragment : NewEventFragment = NewEventFragment.newInstance()
+
+        newEventFragment.eventToEdit = event
+
+        val transaction = supportFragmentManager.beginTransaction().apply {
+            replace(fragmentContainer.id, newEventFragment)
+            addToBackStack(null)
+            }
+            transaction.commit()
+        }
+    }
+
+
+
     private fun updateFragment(fragment: Fragment) {
         if (fragment is MainFragment) {
             fragment.updateList()
@@ -113,4 +139,3 @@ class MainActivity : AppCompatActivity() {
             fragment.updateList()
         }
     }
-}

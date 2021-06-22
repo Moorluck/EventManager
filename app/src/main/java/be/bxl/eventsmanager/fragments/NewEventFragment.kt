@@ -16,6 +16,7 @@ import be.bxl.eventsmanager.R
 import be.bxl.eventsmanager.models.Event
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class NewEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -31,10 +32,12 @@ class NewEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePic
 
     // Data to Add in DB
 
+    var eventToEdit : Event? = null
+
     private lateinit var name : String
     private lateinit var description : String
-    private lateinit var date : LocalDate
-    private lateinit var time : LocalTime
+    private var date : LocalDate = LocalDate.now()
+    private var time : LocalTime = LocalTime.now()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,12 +63,37 @@ class NewEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePic
         }
 
         btnAdd.setOnClickListener {
-            addDataToDB()
+            if (eventToEdit == null) {
+                addDataToDB()
+            }
+            else {
+                updateDataInDB()
+            }
+
             activity?.supportFragmentManager?.popBackStack()
+        }
+
+        if (eventToEdit != null) {
+            etName.setText(eventToEdit?.name)
+            etDescription.setText(eventToEdit?.description)
+            etDate.setText(eventToEdit?.date.toString())
+            etTime.setText(eventToEdit?.time.toString())
+            btnAdd.text = "Update"
+
+            date = eventToEdit!!.date
+            time = eventToEdit!!.time
+        }
+        else {
+            etName.setText("")
+            etDescription.setText("")
+            etDate.setText("")
+            etTime.setText("")
+            btnAdd.text = "Add new event"
         }
 
         return v
     }
+
 
 
 
@@ -115,6 +143,16 @@ class NewEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePic
 
         val newEvent = Event(name, description, date, time)
         EventRepository.newInstance(requireContext()).insertEvent(newEvent)
+    }
+
+    private fun updateDataInDB() {
+        name = etName.text.toString()
+        description = etDescription.text.toString()
+
+        val newEvent = Event(name, description, date, time, eventToEdit!!.id)
+        EventRepository.newInstance(requireContext()).updateOneEvent(newEvent)
+
+        eventToEdit = null
     }
 
 

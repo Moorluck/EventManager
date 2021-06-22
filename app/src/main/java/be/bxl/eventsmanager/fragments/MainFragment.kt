@@ -68,17 +68,26 @@ class MainFragment : Fragment() {
 
         // Setup rv
 
-        todayAdapter = EventAdapter {
-            onDeleteBtnClickListener?.invoke(it)
-        }
+        todayAdapter = EventAdapter (
+            onDeleteClickListener = {
+                onDeleteBtnClickListener?.invoke(it)
+        },
+            onEditClickListener = {
+                onEditBtnClickListener?.invoke(it)
+            })
         todayAdapter.events = this.todayEvents
 
         rvToday.adapter = todayAdapter
         rvToday.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
 
-        tomorrowAdapter = EventAdapter {
-            onDeleteBtnClickListener?.invoke(it)
-        }
+        tomorrowAdapter = EventAdapter (
+            onDeleteClickListener = {
+                onDeleteBtnClickListener?.invoke(it)
+        },
+            onEditClickListener = {
+                onEditBtnClickListener?.invoke(it)
+            })
+
         tomorrowAdapter.events = this.tomorrowEvents
 
         rvTomorrow.adapter = tomorrowAdapter
@@ -103,6 +112,12 @@ class MainFragment : Fragment() {
 
     fun setOnDeleteBtnClickListener (lambda: (Int) -> Unit) {
         onDeleteBtnClickListener = lambda
+    }
+
+    private var onEditBtnClickListener : ((Int) -> Unit)? = null
+
+    fun setOnEditBtnClickListener (lambda: (Int) -> Unit) {
+        onEditBtnClickListener = lambda
     }
 
     companion object {

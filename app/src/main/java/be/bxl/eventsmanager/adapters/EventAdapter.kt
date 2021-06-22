@@ -8,8 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import be.bxl.eventsmanager.R
 import be.bxl.eventsmanager.models.Event
+import java.time.format.DateTimeFormatter
 
-class EventAdapter(val onDeleteClickListener : (Int) -> Unit) : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
+class EventAdapter(val onDeleteClickListener : (Int) -> Unit,
+                   val onEditClickListener : (Int) -> Unit) : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
     // Data
 
@@ -47,10 +49,14 @@ class EventAdapter(val onDeleteClickListener : (Int) -> Unit) : RecyclerView.Ada
         holder.tvName.text = event.name
         holder.tvDate.text = event.date.toString()
         holder.tvDescription.text = event.description
-        holder.tvTime.text = event.time.toString()
+        holder.tvTime.text = event.time.format(DateTimeFormatter.ofPattern("HH:mm"))
 
         holder.btnDelete.setOnClickListener {
             onDeleteClickListener.invoke(event.id)
+        }
+
+        holder.btnEdit.setOnClickListener {
+            onEditClickListener.invoke(event.id)
         }
 
     }

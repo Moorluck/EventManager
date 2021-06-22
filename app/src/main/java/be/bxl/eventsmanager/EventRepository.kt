@@ -79,6 +79,12 @@ class EventRepository() {
         return listener.invoke(listOfEventsOfDay)
     }
 
+    fun getEventById(id : Int) : Event? {
+        val result = db.openReadable().getEventById(id)
+        db.close()
+        return result
+    }
+
     fun updateEvents() {
         events = db.openReadable().getAllEvent()
         db.close()

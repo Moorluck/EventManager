@@ -47,9 +47,14 @@ class EventsManagerFragment() : Fragment() {
             listOfListOfEvent = it
         }
 
-        adapter = EventOfDayAdapter(context) {
-            onDeleteBtnClickListener?.invoke(it)
-        }
+        adapter = EventOfDayAdapter(context,
+            onDeleteClickListener = {
+                onDeleteBtnClickListener?.invoke(it)
+            },
+            onEditClickListener = {
+                onEditBtnClickListener?.invoke(it)
+            })
+
         adapter.eventsOfDay = listOfListOfEvent
 
         rvEvents.adapter = adapter
@@ -72,6 +77,12 @@ class EventsManagerFragment() : Fragment() {
 
     fun setOnDeleteBtnClickListener (lambda: (Int) -> Unit) {
         onDeleteBtnClickListener = lambda
+    }
+
+    private var onEditBtnClickListener : ((Int) -> Unit)? = null
+
+    fun setOnEditBtnClickListener (lambda: (Int) -> Unit) {
+        onEditBtnClickListener = lambda
     }
 
     private var onAddEventClickListener : ((View) -> Unit)? = null
