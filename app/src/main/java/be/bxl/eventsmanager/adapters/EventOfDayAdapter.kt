@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import be.bxl.eventsmanager.R
 import be.bxl.eventsmanager.models.Event
 
-class EventOfDayAdapter(val context : Context?) : RecyclerView.Adapter<EventOfDayAdapter.ViewHolder>() {
+class EventOfDayAdapter(val context : Context?, val onDeleteClickListener : (Int) -> Unit) : RecyclerView.Adapter<EventOfDayAdapter.ViewHolder>() {
 
     var eventsOfDay : MutableList<MutableList<Event>> = mutableListOf()
         set(value) {
@@ -39,9 +39,11 @@ class EventOfDayAdapter(val context : Context?) : RecyclerView.Adapter<EventOfDa
 
         val listOfEvent : MutableList<Event> = eventsOfDay[position]
 
-        holder.tvDay.text = listOfEvent[0].limitDate.toString()
+        holder.tvDay.text = listOfEvent[0].date.toString()
 
-        var adapter = EventAdapter()
+        var adapter = EventAdapter {
+            onDeleteClickListener.invoke(it)
+        }
         adapter.events = listOfEvent
         holder.rvEvent.adapter = adapter
         holder.rvEvent.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)

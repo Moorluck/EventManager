@@ -1,9 +1,13 @@
 package be.bxl.eventsmanager.models
 
 import java.time.LocalDate
+import java.time.LocalTime
 
 data class Event(
-    val id : Int,
     var name : String,
-    var limitDate : LocalDate
+    var description : String,
+    var date : LocalDate,
+    var time : LocalTime,
+
+    val id : Int = 0
 )

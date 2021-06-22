@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import be.bxl.eventsmanager.R
 import be.bxl.eventsmanager.models.Event
 
-class EventAdapter : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
+class EventAdapter(val onDeleteClickListener : (Int) -> Unit) : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
     // Data
 
@@ -21,9 +21,12 @@ class EventAdapter : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val tvEvent : TextView = itemView.findViewById(R.id.tv_event_item)
+        val tvName : TextView = itemView.findViewById(R.id.tv_event_item)
+        val tvDescription : TextView = itemView.findViewById(R.id.tv_description_item)
+        val tvTime : TextView = itemView.findViewById(R.id.tv_time_item)
         val tvDate : TextView = itemView.findViewById(R.id.tv_date_item)
         val btnEdit : ImageView = itemView.findViewById(R.id.btn_edit_item)
+        val btnDelete : ImageView = itemView.findViewById(R.id.btn_delete_item)
 
     }
 
@@ -41,8 +44,14 @@ class EventAdapter : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
         val event = events[position]
 
-        holder.tvEvent.text = event.name
-        holder.tvDate.text = event.limitDate.toString()
+        holder.tvName.text = event.name
+        holder.tvDate.text = event.date.toString()
+        holder.tvDescription.text = event.description
+        holder.tvTime.text = event.time.toString()
+
+        holder.btnDelete.setOnClickListener {
+            onDeleteClickListener.invoke(event.id)
+        }
 
     }
 
