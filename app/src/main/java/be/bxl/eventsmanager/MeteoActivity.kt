@@ -7,15 +7,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import be.bxl.eventsmanager.adapters.MeteoAdapter
 import be.bxl.eventsmanager.api.HttpRequest
+import be.bxl.eventsmanager.api.LocationParse
 import be.bxl.eventsmanager.api.NextWeatherParse
 import be.bxl.eventsmanager.api.URLHelper
 import be.bxl.eventsmanager.models.WeatherObject
+import be.bxl.formation.demo_android_kotlin_gps.helpers.LocationHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,6 +30,7 @@ class MeteoActivity : AppCompatActivity() {
     lateinit var tvCityName : TextView
     lateinit var btnSet : Button
     lateinit var rvMeteo : RecyclerView
+    lateinit var imgLocalisation : ImageView
 
     // Date
 
@@ -47,6 +51,8 @@ class MeteoActivity : AppCompatActivity() {
         etCityName = findViewById(R.id.et_meteo)
         tvCityName = findViewById(R.id.tv_city_name_meteo)
         btnSet = findViewById(R.id.btn_set_meteo)
+        imgLocalisation = findViewById(R.id.img_localisation_meteo)
+
         rvMeteo = findViewById(R.id.rv_meteo)
         rvMeteo.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter = MeteoAdapter()
@@ -68,8 +74,35 @@ class MeteoActivity : AppCompatActivity() {
             launchThreadToUpdateUI()
         }
 
+        imgLocalisation.setOnClickListener {
+            val locationRequest = LocationHelper(this@MeteoActivity) {
+                lifecycleScope.launch {
+                    launchThreadToGetLocation(it)
+                }
+            }
+            locationRequest.getLastLocation()
+        }
+
         launchThreadToUpdateUI()
 
+    }
+
+    private suspend fun launchThreadToGetLocation(it: LocationHelper.Coordinate) {
+        withContext(Dispatchers.IO) {
+            val url = URLHelper.URLLocation
+                .replace("__lat__", it.lat.toString())
+                .replace("__long__", it.lon.toString())
+
+            val request = HttpRequest.getJsonFromRequest(url)
+            if (request != null) {
+                val cityName = LocationParse.parseJson(request)
+                val editor = sharedPref.edit()
+                editor.putString(getString(R.string.city_name), cityName)
+                editor.apply()
+
+                launchThreadToUpdateUI()
+            }
+        }
     }
 
     private fun launchThreadToUpdateUI() {

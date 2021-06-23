@@ -51,4 +51,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_city_name_meteo" />
+
+    <ImageView
+        android:id="@+id/img_localisation_meteo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_set_meteo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_set_meteo"
+        app:srcCompat="@drawable/ic_baseline_add_location_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>

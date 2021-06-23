@@ -28,7 +28,7 @@ class HttpRequest {
                 val reader = BufferedReader(streamReader)
 
                 val builder = StringBuilder()
-                var line : String
+                var line : String?
                 var finish = false
 
                 while (!finish) {
@@ -42,12 +42,13 @@ class HttpRequest {
                         builder.append(line)
                         builder.append("\n")
                     }
-
-                    reader.close()
-                    streamReader.close()
-
-                    requestResult = builder.toString()
                 }
+
+                reader.close()
+                streamReader.close()
+
+                requestResult = builder.toString()
+
             }
             catch (e : Exception) {
                 e.printStackTrace()
