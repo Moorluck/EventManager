@@ -38,14 +38,11 @@ class MainActivity : AppCompatActivity() {
         val mainFragment : MainFragment = MainFragment.newInstance()
         val eventsManagerFragment : EventsManagerFragment = EventsManagerFragment.newInstance()
 
-        // Set Delete btn
-        mainFragment.setOnDeleteBtnClickListener {
-            showDeleteDialog(it, mainFragment)
+        // Affiche le fragment initial
+        val initialTransaction = fm.beginTransaction().apply {
+            replace(fragmentContainer.id, mainFragment)
         }
-
-        eventsManagerFragment.setOnDeleteBtnClickListener {
-            showDeleteDialog(it, eventsManagerFragment)
-        }
+        initialTransaction.commit()
 
         // Set the button add
         eventsManagerFragment.setOnAddEventClickListener {
@@ -57,6 +54,15 @@ class MainActivity : AppCompatActivity() {
             transaction.commit()
         }
 
+        // Set Delete btn
+        mainFragment.setOnDeleteBtnClickListener {
+            showDeleteDialog(it, mainFragment)
+        }
+
+        eventsManagerFragment.setOnDeleteBtnClickListener {
+            showDeleteDialog(it, eventsManagerFragment)
+        }
+
         // Set edit button
         eventsManagerFragment.setOnEditBtnClickListener {
             editEvent(repository.getEventById(it))
@@ -66,12 +72,9 @@ class MainActivity : AppCompatActivity() {
             editEvent(repository.getEventById(it))
         }
 
-        // Affiche le fragment initial
-        val initialTransaction = fm.beginTransaction().apply {
-            replace(fragmentContainer.id, mainFragment)
-        }
-        initialTransaction.commit()
 
+
+        // Setup bottom nav bar
 
         bottomNavView.setOnNavigationItemSelectedListener {
 

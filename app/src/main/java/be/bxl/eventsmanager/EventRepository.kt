@@ -12,12 +12,16 @@ class EventRepository() {
 
     var events = mutableListOf<Event>()
 
+    fun updateEvents() {
+        events = db.openReadable().getAllEvent()
+        db.close()
+    }
 
     fun getListOfTodayEvent(listener : (MutableList<Event>) -> Unit) {
 
         updateEvents()
 
-        var eventOfToday = mutableListOf<Event>()
+        val eventOfToday = mutableListOf<Event>()
 
         for (event in events) {
             if (event.date == LocalDate.now()) {
@@ -83,11 +87,6 @@ class EventRepository() {
         val result = db.openReadable().getEventById(id)
         db.close()
         return result
-    }
-
-    fun updateEvents() {
-        events = db.openReadable().getAllEvent()
-        db.close()
     }
 
     fun deleteEventById(id : Int) {

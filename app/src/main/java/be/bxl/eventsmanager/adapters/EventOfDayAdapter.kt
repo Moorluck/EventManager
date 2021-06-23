@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import be.bxl.eventsmanager.R
 import be.bxl.eventsmanager.models.Event
+import java.time.format.DateTimeFormatter
 
 class EventOfDayAdapter(val context : Context?, val onDeleteClickListener : (Int) -> Unit,
                         val onEditClickListener : (Int) -> Unit) : RecyclerView.Adapter<EventOfDayAdapter.ViewHolder>() {
@@ -40,7 +41,7 @@ class EventOfDayAdapter(val context : Context?, val onDeleteClickListener : (Int
 
         val listOfEvent : MutableList<Event> = eventsOfDay[position]
 
-        holder.tvDay.text = listOfEvent[0].date.toString()
+        holder.tvDay.text = listOfEvent[0].date.format(DateTimeFormatter.ofPattern("EEE dd MMM"))
 
         var adapter = EventAdapter(
             onDeleteClickListener = {
