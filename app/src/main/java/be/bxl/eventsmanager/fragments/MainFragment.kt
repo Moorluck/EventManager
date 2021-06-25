@@ -151,8 +151,7 @@ class MainFragment : Fragment() {
 
         // Custom Pop Up
 
-        memeDialog = Dialog(requireContext())
-        memeDialog.setContentView(R.layout.meme_layout)
+
 
 
 
@@ -177,7 +176,8 @@ class MainFragment : Fragment() {
 
     private suspend fun updateMemeUI(meme: Meme) {
         withContext(Dispatchers.Main) {
-            memeDialog.show()
+            memeDialog = Dialog(requireContext())
+            memeDialog.setContentView(R.layout.meme_layout)
 
             val imgMemePopUp : ImageView = memeDialog.findViewById(R.id.img_meme_pop_up)
             val tvAuthorMeme : TextView = memeDialog.findViewById(R.id.tv_author_meme)
@@ -188,9 +188,7 @@ class MainFragment : Fragment() {
                 .load(meme.imgUrl)
                 .into(imgMemePopUp)
 
-            delay(5000)
-
-            memeDialog.dismiss()
+            memeDialog.show()
         }
 
     }
@@ -217,6 +215,8 @@ class MainFragment : Fragment() {
                 }
             }
         }
+
+
     }
 
     suspend fun updateWeatherUI(weatherObject: WeatherObject) {
