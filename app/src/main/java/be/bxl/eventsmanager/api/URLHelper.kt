@@ -12,5 +12,7 @@ class URLHelper {
         val URLLocation = "https://maps.googleapis.com/maps/api/geocode/json?latlng=__lat__,__long__&key=$apiKeyGoogle"
         val URLIcon = "https://openweathermap.org/img/w/__iconID__.png"
 
+        val URLMeme = "https://meme-api.herokuapp.com/gimme"
+
     }
 }

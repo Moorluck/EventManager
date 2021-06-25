@@ -26,7 +26,6 @@ class EventAdapter(val onDeleteClickListener : (Int) -> Unit,
         val tvName : TextView = itemView.findViewById(R.id.tv_event_item)
         val tvDescription : TextView = itemView.findViewById(R.id.tv_description_item)
         val tvTime : TextView = itemView.findViewById(R.id.tv_time_item)
-        val tvDate : TextView = itemView.findViewById(R.id.tv_date_item)
         val btnEdit : ImageView = itemView.findViewById(R.id.btn_edit_item)
         val btnDelete : ImageView = itemView.findViewById(R.id.btn_delete_item)
 
@@ -47,7 +46,6 @@ class EventAdapter(val onDeleteClickListener : (Int) -> Unit,
         val event = events[position]
 
         holder.tvName.text = event.name
-        holder.tvDate.text = event.date.toString()
         holder.tvDescription.text = event.description
         holder.tvTime.text = event.time.format(DateTimeFormatter.ofPattern("HH:mm"))
 

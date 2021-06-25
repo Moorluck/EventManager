@@ -7,6 +7,7 @@
     tools:context=".fragments.MainFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root_view_main_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -109,6 +110,16 @@
             android:textColor="#938B8B"
             app:layout_constraintStart_toStartOf="@+id/tv_tommorow_main"
             app:layout_constraintTop_toBottomOf="@+id/tv_tommorow_main" />
+
+        <ImageView
+            android:id="@+id/img_meme_main"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/troll_face"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_date_main"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_date_main"
+            app:layout_constraintTop_toTopOf="@+id/tv_date_main" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

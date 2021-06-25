@@ -27,7 +27,7 @@
         android:id="@+id/fragment_container_main"
         android:layout_width="409dp"
         android:layout_height="673dp"
-        android:paddingVertical="0dp"
+        android:padding="16dp"
         app:layout_constraintBottom_toTopOf="@+id/coordinatorLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

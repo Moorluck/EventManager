@@ -1,8 +1,8 @@
 package be.bxl.eventsmanager.fragments
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,11 +19,15 @@ import be.bxl.eventsmanager.R
 import be.bxl.eventsmanager.adapters.EventAdapter
 import be.bxl.eventsmanager.api.CurentWeatherParse
 import be.bxl.eventsmanager.api.HttpRequest
+import be.bxl.eventsmanager.api.MemeParse
 import be.bxl.eventsmanager.api.URLHelper
 import be.bxl.eventsmanager.models.WeatherObject
 import be.bxl.eventsmanager.models.Event
+import be.bxl.eventsmanager.models.Meme
+import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -46,6 +50,8 @@ class MainFragment : Fragment() {
 
     private lateinit var imgIconWeather : ImageView
 
+    private lateinit var imgMeme : ImageView
+
     // Data
 
     private lateinit var repository : EventRepository
@@ -59,6 +65,10 @@ class MainFragment : Fragment() {
 
     private lateinit var todayAdapter : EventAdapter
     private lateinit var tomorrowAdapter : EventAdapter
+
+    // Dialog Meme
+
+    private lateinit var memeDialog : Dialog
 
 
 
@@ -79,6 +89,8 @@ class MainFragment : Fragment() {
         rvTomorrow = v.findViewById(R.id.rv_tomorrow_main)
 
         imgIconWeather = v.findViewById(R.id.img_icon_weather_main)
+
+        imgMeme = v.findViewById(R.id.img_meme_main)
 
         // Set the date
         val localDateString = LocalDate.now().format(DateTimeFormatter.ofPattern("EEE dd MMM"))
@@ -137,7 +149,50 @@ class MainFragment : Fragment() {
             startActivity(intent)
         }
 
+        // Custom Pop Up
+
+        memeDialog = Dialog(requireContext())
+        memeDialog.setContentView(R.layout.meme_layout)
+
+
+
+        // Meme Button
+
+        imgMeme.setOnClickListener {
+            lifecycleScope.launch {
+
+                withContext(Dispatchers.IO) {
+                    val url = URLHelper.URLMeme
+                    val request = HttpRequest.getJsonFromRequest(url)
+                    if (request != null) {
+                        val meme = MemeParse.parseJson(request)
+                        updateMemeUI(meme)
+                    }
+                }
+
+            }
+        }
         return v
+    }
+
+    private suspend fun updateMemeUI(meme: Meme) {
+        withContext(Dispatchers.Main) {
+            memeDialog.show()
+
+            val imgMemePopUp : ImageView = memeDialog.findViewById(R.id.img_meme_pop_up)
+            val tvAuthorMeme : TextView = memeDialog.findViewById(R.id.tv_author_meme)
+
+            tvAuthorMeme.text = meme.author
+
+            Glide.with(requireContext())
+                .load(meme.imgUrl)
+                .into(imgMemePopUp)
+
+            delay(5000)
+
+            memeDialog.dismiss()
+        }
+
     }
 
     override fun onResume() {
