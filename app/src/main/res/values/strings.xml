@@ -5,4 +5,6 @@
     <string name="bottom_bar_today_events">Today Events</string>
     <string name="bottom_bar_manage_events">Manage Events</string>
     <string name="city_name">CITY_NAME</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>
